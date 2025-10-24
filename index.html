@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Portal de Licenciados — Global Tecnologia</title>
+
+<!-- FAVICON SVG EMBUTIDO (laranja/preto, leve e confiável) -->
+<link rel="icon" href="data:image/svg+xml;utf8,
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'>
+  <rect width='128' height='128' rx='24' fill='%23000'/>
+  <g transform='translate(16,16)'>
+    <rect x='0'  y='36' width='96' height='24' rx='8' fill='%23ff7a00'/>
+    <rect x='36' y='0'  width='24' height='96' rx='8' fill='%23ff7a00'/>
+  </g>
+</svg>"/>
+
+<style>
+:root{
+  --preto:#000; --laranja:#ff7a00; --texto:#f5f5f5; --texto2:#cfcfcf;
+  --card:#111; --borda:#333; --sombra:rgba(255,122,0,.14);
+  --ok:#0dd36f; --warn:#ffb84d; --err:#ff5a4d;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--preto);color:var(--texto);font:16px/1.5 'Segoe UI',Roboto,system-ui,sans-serif}
+header{background:var(--laranja);color:#000;display:flex;align-items:center;gap:12px;padding:10px 16px;box-shadow:0 6px 24px var(--sombra)}
+header .logo{width:64px;height:64px;border-radius:14px;object-fit:cover;box-shadow:0 4px 18px rgba(0,0,0,.35)}
+.title-wrap{display:flex;flex-direction:column;line-height:1.1}
+.titulo{font-size:20px;font-weight:800}
+.sub{font-size:13px;opacity:.95}
+#hora{margin-left:auto;font-weight:700;font-size:14px}
+.btn-sair{margin-left:12px;background:#1d1d1d;color:#fff;border:1px solid var(--borda);border-radius:10px;padding:8px 12px;font-weight:800;cursor:pointer}
+main{max-width:1200px;margin:26px auto;padding:0 16px}
+.card{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:16px;box-shadow:0 8px 28px var(--sombra)}
+.apps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.appbtn{display:flex;gap:10px;align-items:center;justify-content:flex-start;padding:14px;border:1px solid var(--borda);border-radius:12px;background:#151515;text-decoration:none;color:var(--texto)}
+.appbtn .ico{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#2a2a2a,#000);display:flex;align-items:center;justify-content:center;font-weight:900}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;margin-left:8px;border:1px solid var(--borda)}
+.ok{color:var(--ok);border-color:rgba(13,211,111,.4)}
+.off{color:#bbb;border-color:#444}
+footer{margin:40px 0 20px;text-align:center;color:var(--texto2);font-size:12px}
+.hide{display:none}
+.center{text-align:center}
+.primary{background:var(--laranja);color:#000;border:none;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer}
+.sec{background:#1d1d1d;color:var(--texto);border:1px solid var(--borda);border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer}
+.muted{color:var(--texto2)}
+input,textarea,select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--borda);background:#1d1d1d;color:var(--texto)}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{border-bottom:1px solid #282828;padding:8px;text-align:left;vertical-align:top}
+th{color:var(--laranja);text-transform:uppercase;font-size:12px;letter-spacing:.4px}
+.fab-wrap{position:fixed;right:18px;bottom:18px;display:flex;flex-direction:column;gap:10px;z-index:50}
+.fab{display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:999px;background:var(--laranja);color:#000;font-size:22px;box-shadow:0 10px 30px rgba(0,0,0,.35);text-decoration:none}
+
+.grid2{display:grid;gap:12px}
+@media(min-width:900px){.grid2{grid-template-columns:1fr 1fr}}
+.small{font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <!-- LOGO: por padrão usa SVG embutido pequeno. 
+       SE QUISER a sua JPG embutida, substitua o src abaixo por:
+       src="data:image/jpeg;base64,PASTE_AQUI_SUA_BASE64" -->
+  <img class="logo" alt="Logo Global"
+       src="data:image/svg+xml;utf8,
+       <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'>
+         <rect width='128' height='128' rx='24' fill='%23000'/>
+         <g transform='translate(16,16)'>
+           <rect x='0'  y='36' width='96' height='24' rx='8' fill='%23ff7a00'/>
+           <rect x='36' y='0'  width='24' height='96' rx='8' fill='%23ff7a00'/>
+         </g>
+       </svg>">
+  <div class="title-wrap">
+    <div class="titulo">Portal de Licenciados</div>
+    <div class="sub">Global Tecnologia</div>
+  </div>
+  <div id="hora"></div>
+  <button id="btnSair" class="btn-sair hide">Sair</button>
+</header>
+
+<main>
+  <!-- LOGIN (ADMIN APENAS) -->
+  <section id="telaAuth" class="card">
+    <h3 class="center" style="margin:0 0 6px">Login do Administrador</h3>
+    <p class="muted center" style="margin-top:0">Acesso restrito a <b>alerta.global.rastreamento@gmail.com</b></p>
+    <label>Email</label>
+    <input id="authEmail" type="email" value="alerta.global.rastreamento@gmail.com">
+    <label>Senha</label>
+    <input id="authPass" type="password" placeholder="Digite a senha">
+    <div class="center" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px;">
+      <button id="btnEntrar" class="primary">Entrar</button>
+      <button id="btnLimparAuth" class="sec">Limpar</button>
+    </div>
+    <div id="msgAuth" class="center" style="color:#ffb84d;margin-top:8px"></div>
+  </section>
+
+  <!-- PAINEL ADMINISTRATIVO -->
+  <section id="painelAdmin" class="hide">
+    <div class="card">
+      <h3>Admin • Licenciados</h3>
+      <div class="grid2">
+        <div class="card">
+          <h4>Novo / Editar</h4>
+          <input id="a_id" type="hidden">
+          <label>Cliente</label><input id="a_cliente" placeholder="Nome completo">
+          <label>CPF</label><input id="a_cpf" placeholder="00000000000">
+          <label>E-mail</label><input id="a_email" placeholder="email@dominio.com">
+          <label>Telefone</label><input id="a_tel" placeholder="+55 75 9....">
+          <label>Código de Licença</label><input id="a_codigo" placeholder="GXXXXX2025YY">
+          <label>Ativo</label>
+          <select id="a_ativo"><option value="true">true</option><option value="false">false</option></select>
+          <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+            <button id="btnAddLic" class="primary">Salvar licenciado</button>
+            <button id="btnClearLic" class="sec">Limpar</button>
+          </div>
+        </div>
+        <div class="card">
+          <h4>Licenciados (Firestore)</h4>
+          <table>
+            <thead><tr><th>Cliente</th><th>CPF</th><th>Código</th><th>Ativo</th><th>Ações</th></tr></thead>
+            <tbody id="tbLic"></tbody>
+          </table>
+          <div class="small muted">Dica: use o campo “Código” para validar acesso do licenciado.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Admin • Trocas de Óleo (todas)</h3>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <input id="fPlaca" placeholder="Filtrar por placa (opcional)" style="max-width:220px">
+        <button id="btnExportXLSX" class="primary">Exportar tudo (.xlsx)</button>
+      </div>
+      <table>
+        <thead><tr><th>UID</th><th>Placa</th><th>KM</th><th>Data</th><th>Obs</th><th>Ações</th></tr></thead>
+        <tbody id="tbAllTrocas"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PAINEL DO LICENCIADO -->
+  <section id="painelLicenciado" class="hide">
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:10px">
+        <img src="data:image/svg+xml;utf8,
+        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'>
+          <rect width='128' height='128' rx='24' fill='%23000'/>
+          <g transform='translate(16,16)'>
+            <rect x='0'  y='36' width='96' height='24' rx='8' fill='%23ff7a00'/>
+            <rect x='36' y='0'  width='24' height='96' rx='8' fill='%23ff7a00'/>
+          </g>
+        </svg>" width="40" height="40" style="border-radius:10px;object-fit:cover">
+        <div>
+          <div style="font-weight:900">Bem-vindo, <span id="nomeLicenciado">—</span></div>
+          <div class="muted" id="licInfo">CPF — • E-mail — • Tel —</div>
+        </div>
+        <span class="badge ok" id="licStatus" style="margin-left:auto">ATIVO</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Aplicações</h3>
+      <div class="apps">
+        <!-- link para seção interna de troca -->
+        <a class="appbtn" href="#mod-troca">
+          <div class="ico">⛽</div>
+          <div><div style="font-weight:800">Troca de Óleo</div><div class="muted">Cadastro e histórico</div></div>
+          <span class="badge ok" style="margin-left:auto">Interno</span>
+        </a>
+
+        <a class="appbtn" href="https://globalrastreamento2020-maker.github.io/Controle-de-Motoristas/" target="_blank">
+          <div class="ico">🚛</div>
+          <div><div style="font-weight:800">Controle de Motoristas</div><div class="muted">Cadastro e vínculo</div></div>
+          <span class="badge ok" style="margin-left:auto">Externo</span>
+        </a>
+
+        <a class="appbtn" href="#" onclick="alert('Gerador de Contratos: em breve'); return false;">
+          <div class="ico">🧾</div>
+          <div><div style="font-weight:800">Gerador de Contratos</div><div class="muted">Em breve</div></div>
+          <span class="badge off" style="margin-left:auto">Inativo</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- MÓDULO TROCA DE ÓLEO (DO LICENCIADO) -->
+    <div id="mod-troca" class="card">
+      <h3>Troca de Óleo — Global Tecnologia</h3>
+      <p class="muted">Os dados são salvos no Firestore e visíveis apenas para o usuário autenticado.</p>
+
+      <div class="grid2">
+        <div class="card">
+          <h4>Novo registro</h4>
+          <label>Placa</label><input id="t_placa" placeholder="ABC-1D23">
+          <label>KM atual</label><input id="t_km" type="number" placeholder="120000">
+          <label>Data da troca</label><input id="t_data" type="date">
+          <label>Observações</label><textarea id="t_obs" placeholder="Troca completa, filtro, viscosidade..."></textarea>
+          <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+            <button id="btnSalvarTroca" class="primary">Salvar</button>
+            <button id="btnPrintTroca"  class="sec">Imprimir (PDF)</button>
+            <button id="btnCsvTroca"    class="primary">Exportar Excel (.csv)</button>
+          </div>
+        </div>
+        <div class="card">
+          <h4>Histórico</h4>
+          <table>
+            <thead><tr><th>Placa</th><th>KM</th><th>Data</th><th>Obs</th><th>Ações</th></tr></thead>
+            <tbody id="tbTrocas"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card center" id="rodapeDinamico" style="font-size:13px;color:#cfcfcf">
+      © 2025 Global Tecnologia — Plataforma do Licenciado
+    </div>
+  </section>
+</main>
+
+<!-- WhatsApp -->
+<div class="fab-wrap">
+  <a class="fab" href="https://wa.me/5575988515825" target="_blank" title="Suporte WhatsApp">💬</a>
+</div>
+
+<footer>© 2025 Global Tecnologia • Portal Unificado • Tema preto & laranja</footer>
+
+<!-- Relógio -->
+<script>
+const $=(s,el=document)=>el.querySelector(s);
+function tickHora(){ $("#hora").textContent=new Date().toLocaleTimeString("pt-BR",{hour12:false}); }
+setInterval(tickHora,1000); tickHora();
+</script>
+
+<!-- SheetJS para exportar .xlsx no painel admin -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.19.3/dist/xlsx.full.min.js"></script>
+
+<!-- ===== Firebase (Auth + Firestore) ===== -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, setDoc, deleteDoc, updateDoc, doc, onSnapshot, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC2oh-cdVghwkly1rRmx901x0U0g7U8ARs",
+  authDomain: "central-pro-global-tecnologia.firebaseapp.com",
+  projectId: "central-pro-global-tecnologia",
+  storageBucket: "central-pro-global-tecnologia.firebasestorage.app",
+  messagingSenderId: "93777415891",
+  appId: "1:93777415891:web:d688baf9d09f12e743ce26"
+};
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+const ADMIN_EMAIL = "alerta.global.rastreamento@gmail.com";
+
+let currentUser = null;
+let licenciadoAtivo = null;
+
+// ===== Login Admin =====
+$("#btnLimparAuth")?.addEventListener("click", ()=>{ $("#authEmail").value=ADMIN_EMAIL; $("#authPass").value=""; $("#msgAuth").textContent=""; });
+
+$("#btnEntrar")?.addEventListener("click", async ()=>{
+  const email = ($("#authEmail")?.value||"").trim();
+  const pass  = ($("#authPass")?.value||"").trim();
+  const msg   = $("#msgAuth");
+  if(!email || !pass){ msg.textContent="Informe e-mail e senha."; return; }
+  if(email.toLowerCase() !== ADMIN_EMAIL){ msg.textContent="Acesso restrito ao e-mail administrador."; return; }
+  try{
+    await signInWithEmailAndPassword(auth,email,pass);
+  }catch(err){
+    if(err.code==="auth/user-not-found"){
+      try{
+        await createUserWithEmailAndPassword(auth,email,pass);
+        msg.textContent="Usuário criado e logado.";
+      }catch(e){ msg.textContent="Erro ao criar usuário: "+(e.message||e.code); }
+    }else{
+      msg.textContent="Erro de login: "+(err.message||err.code);
+    }
+  }
+});
+
+onAuthStateChanged(auth,(user)=>{
+  currentUser=user||null;
+  if(user){
+    $("#telaAuth").classList.add("hide");
+    $("#btnSair").classList.remove("hide");
+    // Admin vê painel admin diretamente
+    if(user.email && user.email.toLowerCase()===ADMIN_EMAIL){
+      $("#painelAdmin").classList.remove("hide");
+      carregarLicenciados();
+      carregarTodasTrocas();
+    }else{
+      // Futuro: fluxo de licenciado comum
+      alert("Conta não-autorizada para este portal.");
+    }
+  }else{
+    $("#telaAuth").classList.remove("hide");
+    $("#painelAdmin").classList.add("hide");
+    $("#painelLicenciado").classList.add("hide");
+    $("#btnSair").classList.add("hide");
+    $("#msgAuth").textContent="";
+  }
+});
+
+$("#btnSair")?.addEventListener("click", async()=>{ await signOut(auth); alert("Você saiu do sistema."); });
+
+// ===== Painel Admin • Licenciados =====
+function formLic(){ 
+  return {
+    cliente: ($("#a_cliente")?.value||"").trim(),
+    cpf:     ($("#a_cpf")?.value||"").trim(),
+    email:   ($("#a_email")?.value||"").trim(),
+    telefone:($("#a_tel")?.value||"").trim(),
+    codigo:  ($("#a_codigo")?.value||"").trim(),
+    ativo:   ($("#a_ativo")?.value||"true")==="true"
+  };
+}
+
+$("#btnAddLic")?.addEventListener("click", async ()=>{
+  const id = $("#a_id").value;
+  const data = formLic();
+  if(!data.cliente || !data.codigo){ return alert("Informe ao menos Cliente e Código."); }
+  try{
+    if(id){
+      await updateDoc(doc(db,"licenciados",id),data);
+    }else{
+      await addDoc(collection(db,"licenciados"),data);
+    }
+    clearLicForm();
+    alert("Salvo com sucesso!");
+  }catch(e){ alert("Erro ao salvar: "+(e.message||e.code)); }
+});
+
+$("#btnClearLic")?.addEventListener("click", clearLicForm);
+function clearLicForm(){ ["#a_id","#a_cliente","#a_cpf","#a_email","#a_tel","#a_codigo"].forEach(s=>$(s).value=""); $("#a_ativo").value="true"; }
+
+function carregarLicenciados(){
+  const tbody = $("#tbLic");
+  onSnapshot(collection(db,"licenciados"), (snap)=>{
+    const rows=[];
+    snap.forEach(d=>{
+      const v=d.data(); const id=d.id;
+      rows.push(`<tr>
+        <td>${esc(v.cliente)}</td><td>${esc(v.cpf)}</td><td>${esc(v.codigo)}</td>
+        <td>${v.ativo===true?"true":"false"}</td>
+        <td>
+          <button class="sec" onclick="editLic('${id}')">✏️</button>
+          <button class="sec" onclick="delLic('${id}')">🗑️</button>
+        </td>
+      </tr>`);
+    });
+    tbody.innerHTML = rows.join("")||`<tr><td colspan="5" class="muted">Sem licenciados.</td></tr>`;
+  });
+}
+
+window.editLic = async (id)=>{
+  const ref = doc(db,"licenciados",id);
+  const qs  = await getDocs(query(collection(db,"licenciados")));
+  // simples: percorre e acha
+  qs.forEach(d=>{
+    if(d.id===id){
+      const v=d.data();
+      $("#a_id").value=id;
+      $("#a_cliente").value=v.cliente||"";
+      $("#a_cpf").value=v.cpf||"";
+      $("#a_email").value=v.email||"";
+      $("#a_tel").value=v.telefone||"";
+      $("#a_codigo").value=v.codigo||"";
+      $("#a_ativo").value=String(v.ativo===true);
+      window.scrollTo({top:0,behavior:"smooth"});
+    }
+  });
+};
+
+window.delLic = async (id)=>{
+  if(!confirm("Excluir licenciado?")) return;
+  try{ await deleteDoc(doc(db,"licenciados",id)); }catch(e){ alert("Erro ao excluir: "+(e.message||e.code)); }
+};
+
+// ===== Painel Admin • Todas as trocas =====
+function carregarTodasTrocas(){
+  const tbody = $("#tbAllTrocas");
+  const filtro = $("#fPlaca");
+  async function refresh(){
+    const placa = (filtro.value||"").trim().toUpperCase();
+    const rows=[];
+    const snap = await getDocs(collection(db,"trocas_oleo"));
+    snap.forEach(d=>{
+      const v=d.data(); const id=d.id;
+      if(placa && String(v.placa||"").toUpperCase()!==placa) return;
+      rows.push(`<tr>
+        <td class="small">${esc(v.uid)}</td>
+        <td>${esc(v.placa)}</td><td>${esc(v.km)}</td><td>${esc(v.data)}</td><td>${esc(v.observacao)}</td>
+        <td><button class="sec" onclick="delTrocaAdmin('${id}')">🗑️</button></td>
+      </tr>`);
+    });
+    tbody.innerHTML = rows.join("")||`<tr><td colspan="6" class="muted">Sem trocas.</td></tr>`;
+  }
+  filtro.oninput = refresh;
+  refresh();
+
+  // Export XLSX (duas abas)
+  $("#btnExportXLSX").onclick = async ()=>{
+    // coleta licenciados
+    const lic = [["cliente","cpf","email","telefone","codigo","ativo"]];
+    const lSnap = await getDocs(collection(db,"licenciados"));
+    lSnap.forEach(d=>{ const v=d.data(); lic.push([v.cliente||"",v.cpf||"",v.email||"",v.telefone||"",v.codigo||"",v.ativo===true?"true":"false"]); });
+
+    // coleta trocas
+    const tro = [["uid","placa","km","data","observacao","criado_em"]];
+    const tSnap = await getDocs(collection(db,"trocas_oleo"));
+    tSnap.forEach(d=>{ const v=d.data(); tro.push([v.uid||"",v.placa||"",v.km||"",v.data||"",v.observacao||"",v.criado_em||""]); });
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(lic), "Licenciados");
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(tro), "Trocas de Óleo");
+    XLSX.writeFile(wb, "global_tecnologia_export.xlsx");
+  };
+}
+
+window.delTrocaAdmin = async (id)=>{
+  if(!confirm("Excluir troca?")) return;
+  try{ await deleteDoc(doc(db,"trocas_oleo",id)); }catch(e){ alert("Erro ao excluir: "+(e.message||e.code)); }
+};
+
+// ===== Módulo Troca (licenciado atual) =====
+const tbTrocas = $("#tbTrocas");
+$("#btnPrintTroca")?.addEventListener("click", ()=>window.print());
+$("#btnCsvTroca")?.addEventListener("click", async ()=>{
+  if(!currentUser) return alert("Faça login.");
+  const qRef = query(collection(db,"trocas_oleo"), where("uid","==", currentUser.uid));
+  const snap = await getDocs(qRef);
+  const linhas=[["Placa","KM","Data","Observações"]];
+  snap.forEach(d=>{ const v=d.data(); linhas.push([v.placa||"",v.km||"",v.data||"",String(v.observacao||"").replaceAll('"','""')]); });
+  const csv = linhas.map(r=>r.map(v=>`"${String(v||"").replaceAll('"','""')}"`).join(";")).join("\r\n");
+  const blob = new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="trocas_oleo.csv"; a.click(); URL.revokeObjectURL(a.href);
+});
+
+$("#btnSalvarTroca")?.addEventListener("click", async ()=>{
+  if(!currentUser) return alert("Faça login.");
+  const placa=($("#t_placa")?.value||"").trim().toUpperCase();
+  const km   =($("#t_km")?.value||"").trim();
+  const data =($("#t_data")?.value||"").trim();
+  const obs  =($("#t_obs")?.value||"").trim();
+  if(!placa||!km||!data) return alert("Informe Placa, KM e Data.");
+  try{
+    await addDoc(collection(db,"trocas_oleo"), { uid:currentUser.uid, placa, km, data, observacao:obs, criado_em:new Date().toISOString() });
+    ["#t_placa","#t_km","#t_data","#t_obs"].forEach(s=>$(s).value="");
+    alert("Troca salva!");
+    listarMinhasTrocas(); // refresh
+  }catch(e){ alert("Erro ao salvar: "+(e.message||e.code)); }
+});
+
+async function listarMinhasTrocas(){
+  if(!currentUser){ tbTrocas.innerHTML=""; return; }
+  const qRef = query(collection(db,"trocas_oleo"), where("uid","==", currentUser.uid));
+  const snap = await getDocs(qRef);
+  const rows=[];
+  snap.forEach(docu=>{
+    const v=docu.data(); const id=docu.id;
+    rows.push(`<tr>
+      <td>${esc(v.placa)}</td><td>${esc(v.km)}</td><td>${esc(v.data)}</td><td>${esc(v.observacao)}</td>
+      <td><button class="sec" onclick="delTroca('${id}')">Excluir</button></td>
+    </tr>`);
+  });
+  tbTrocas.innerHTML = rows.join("")||`<tr><td colspan="5" class="muted">Sem registros.</td></tr>`;
+}
+window.delTroca = async (id)=>{ try{ await deleteDoc(doc(db,"trocas_oleo",id)); listarMinhasTrocas(); }catch(e){ alert("Erro ao excluir: "+(e.message||e.code)); } };
+
+// Util
+function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+</script>
+
+</body>
+</html>
