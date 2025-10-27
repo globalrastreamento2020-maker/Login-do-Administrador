@@ -534,42 +534,68 @@ window.delMot = async (id)=>{ try{ await deleteDoc(doc(db,"motoristas",id)); lis
 function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
 </script>
 </body> 
-<!-- Botão integrado ao menu superior -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-  // procura o botão "Sair"
-  const botaoSair = document.querySelector("a[href*='logout'], a[href*='sair']");
+  const botaoSair = document.querySelector("#btnSair");
   
   if (botaoSair) {
-    // cria o novo botão
+    // Cria o botão principal
     const botaoPlataforma = document.createElement("a");
     botaoPlataforma.href = "https://app.globalrastreamento.net.br";
     botaoPlataforma.target = "_blank";
-    botaoPlataforma.innerText = "🚗 Plataforma de Rastreamento";
+    botaoPlataforma.className = "btn-plataforma-softtec";
+    botaoPlataforma.innerHTML = `
+      <span class="icon-glow">🚀</span> Plataforma de Rastreamento
+    `;
     
-    // aplica o estilo
-    botaoPlataforma.style.background = "linear-gradient(90deg, #004aad, #007bff)";
-    botaoPlataforma.style.color = "#fff";
-    botaoPlataforma.style.fontWeight = "600";
-    botaoPlataforma.style.textDecoration = "none";
-    botaoPlataforma.style.padding = "8px 14px";
-    botaoPlataforma.style.borderRadius = "6px";
-    botaoPlataforma.style.marginRight = "10px";
-    botaoPlataforma.style.transition = "0.3s";
-    
-    botaoPlataforma.addEventListener("mouseover", () => {
-      botaoPlataforma.style.transform = "scale(1.05)";
-      botaoPlataforma.style.background = "linear-gradient(90deg, #007bff, #004aad)";
-    });
-    
-    botaoPlataforma.addEventListener("mouseout", () => {
-      botaoPlataforma.style.transform = "scale(1)";
-      botaoPlataforma.style.background = "linear-gradient(90deg, #004aad, #007bff)";
-    });
-
-    // insere o botão antes do "Sair"
+    // Insere o botão antes do "Sair"
     botaoSair.parentNode.insertBefore(botaoPlataforma, botaoSair);
+
+    // Adiciona os estilos diretamente
+    const style = document.createElement("style");
+    style.innerHTML = `
+      .btn-plataforma-softtec {
+        background: linear-gradient(90deg, #ff6a00, #000000);
+        color: #fff;
+        font-weight: 600;
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        margin-right: 10px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: 'Inter', sans-serif;
+        letter-spacing: 0.5px;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn-plataforma-softtec:hover {
+        transform: scale(1.07);
+        background: linear-gradient(90deg, #000000, #ff6a00);
+        box-shadow: 0 0 15px rgba(255,106,0,0.7);
+      }
+
+      .btn-plataforma-softtec .icon-glow {
+        font-size: 1.2em;
+        animation: glowPulse 1.8s infinite ease-in-out;
+        filter: drop-shadow(0 0 4px #ff6a00);
+      }
+
+      @keyframes glowPulse {
+        0% { filter: drop-shadow(0 0 2px #ff6a00) brightness(1); transform: scale(1); }
+        50% { filter: drop-shadow(0 0 8px #ff9f40) brightness(1.4); transform: scale(1.2); }
+        100% { filter: drop-shadow(0 0 2px #ff6a00) brightness(1); transform: scale(1); }
+      }
+    `;
+    document.head.appendChild(style);
+  } else {
+    console.warn("Botão #btnSair não encontrado.");
   }
 });
 </script>
+
 </html>
