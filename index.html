@@ -533,7 +533,8 @@ window.delMot = async (id)=>{ try{ await deleteDoc(doc(db,"motoristas",id)); lis
 // Utils
 function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
 </script>
-</body> <!-- Botão integrado ao menu superior -->
+</body> 
+<!-- Botão integrado ao menu superior -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
   // procura o botão "Sair"
