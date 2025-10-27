@@ -533,5 +533,39 @@ window.delMot = async (id)=>{ try{ await deleteDoc(doc(db,"motoristas",id)); lis
 // Utils
 function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
 </script>
-</body>
+</body> <!-- Botão fixo da Plataforma de Rastreamento -->
+<a href="https://app.globalrastreamento.net.br"
+   target="_blank"
+   class="btn-plataforma-rastreamento">
+   🚗 Plataforma de Rastreamento
+</a>
+
+<style>
+.btn-plataforma-rastreamento {
+  position: fixed;
+  top: 10px;
+  right: 20px;
+  z-index: 9999;
+  background: linear-gradient(90deg, #004aad, #007bff);
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 10px 18px;
+  border-radius: 50px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+}
+.btn-plataforma-rastreamento:hover {
+  transform: scale(1.05);
+  background: linear-gradient(90deg, #007bff, #004aad);
+}
+@media (max-width: 768px) {
+  .btn-plataforma-rastreamento {
+    top: auto;
+    bottom: 20px;
+    right: 15px;
+    font-size: 14px;
+  }
+}
+</style>
 </html>
